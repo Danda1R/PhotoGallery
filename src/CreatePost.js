@@ -6,6 +6,8 @@ import Button from "./Button";
 import { v4 as uuid } from "uuid";
 import { Storage, API, Auth } from "aws-amplify";
 import { createPost } from "./graphql/mutations";
+//Use this for iPhone built-in photo Gallery
+//import { launchImageLibrary } from "react-native-image-picker";
 
 /* Initial state to hold form input, saving state */
 const initialState = {
@@ -108,6 +110,7 @@ export default function CreatePost({
       {formState.file && (
         <img className={imageStyle} alt="preview" src={formState.file} />
       )}
+
       <Button title="Create New Post" onClick={save} />
       <Button
         type="cancel"

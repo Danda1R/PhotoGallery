@@ -1,70 +1,84 @@
-# Getting Started with Create React App
+Hello Division B! This photo gallery is an example of how to implement images into the Juego Juegos App.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+I have put comments next to each function to explain its use. Please read below for the most relevant functions for the JJ app.
 
-## Available Scripts
+App.js
 
-In the project directory, you can run:
+```
+    postsArray = await Promise.all(
+      postsArray.map(async (post) => {
+        const imageKey = await Storage.get(post.image);
+        post.image = imageKey;
+        return post;
+      })
+    );
+```
 
-### `npm start`
+This function goes through all of the post in the app to display the photos.
+The image key that was saved in the graphQL schema is used to locate the unique image URL in the S3 storage.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+CreatePost.js
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+```
+    <input type="file" onChange={onChangeFile} />
+      {formState.file && (
+        <img className={imageStyle} alt="preview" src={formState.file} />
+      )}
+```
 
-### `npm test`
+This input will create a "Choose file" button for users as seen below.
+When the photo is added, it will trigger the onChangeFile function
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```
+function onChangeFile(e) {
+    e.persist();
+    if (!e.target.files[0]) return;
+    const fileExtPosition = e.target.files[0].name.search(/.png|.jpg|.gif/i);
+    const firstHalf = e.target.files[0].name.slice(0, fileExtPosition);
+    const secondHalf = e.target.files[0].name.slice(fileExtPosition);
+    const fileName = firstHalf + "_" + uuid() + secondHalf;
+    console.log(fileName);
+    const image = { fileInfo: e.target.files[0], name: fileName };
+    updateFormState((currentState) => ({
+      ...currentState,
+      file: URL.createObjectURL(e.target.files[0]),
+      image,
+    }));
+  }
+```
 
-### `npm run build`
+This function will add the image's uuid to the filename before the user inputs the post
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```
+await Storage.put(formState.image.name, formState.image.fileInfo);
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+This line will put the image in the storage with the modified file name and original name attached and saved.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Posts.js
 
-### `npm run eject`
+```
+        <Link to={`/post/${post.id}`} className={linkStyle} key={post.id}>
+          <div key={post.id} className={postContainer}>
+            <h1 className={postTitleStyle}>{post.name}</h1>
+            <img alt="post" className={imageStyle} src={post.image} />
+          </div>
+        </Link>
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+This function uses the Link to and key parameters to get the correct post variable and the correct post name and image url
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Post.js
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+```
+      const currentPost = postData.data.getPost;
+      const image = await Storage.get(currentPost.image);
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+      currentPost.image = image;
+```
 
-## Learn More
+This function obtains the image from the S3 bucket using the post data image url from the GraphQL schema
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+These are the most important and unique functions to implement in the JJ app.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Please DM me if you have any additional questions.

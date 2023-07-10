@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 export default function Header() {
   return (
     <div className={headerContainer}>
-      <h1 className={headerStyle}>Postagram</h1>
+      <h1 className={headerStyle}>Photo Gallery</h1>
       <Link to="/" className={linkStyle}>
         All Posts
       </Link>
