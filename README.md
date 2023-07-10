@@ -1,5 +1,7 @@
 Hello Division B! This photo gallery is an example of how to implement images into the Juego Juegos App.
 
+This is the link to the AWS Amplify full stack example: https://main.d3rdrw0ii1lyq8.amplifyapp.com/
+
 I have put comments next to each function to explain its use. Please read below for the most relevant functions for the JJ app.
 
 App.js
