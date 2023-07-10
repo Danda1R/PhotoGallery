@@ -27,6 +27,9 @@ CreatePost.js
 ```
 
 This input will create a "Choose file" button for users as seen below.
+
+![Alt text](./FileUploadImage.jpg?raw=true "FileUploader")
+
 When the photo is added, it will trigger the onChangeFile function
 
 ```
