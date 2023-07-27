@@ -20,6 +20,7 @@ export default function Post() {
         variables: { id },
       });
       const currentPost = postData.data.getPost;
+      console.log(currentPost.image);
       const image = await Storage.get(currentPost.image);
 
       currentPost.image = image;
